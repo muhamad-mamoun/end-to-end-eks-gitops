@@ -1,5 +1,5 @@
-output "bastion-server-role" {
-  value = aws_iam_role.bastion-server-role
+output "bastion-server-instance-profile-name" {
+  value = aws_iam_instance_profile.bastion-server-instance-profile.name
 }
 
 output "eks-control-plane-role" {
