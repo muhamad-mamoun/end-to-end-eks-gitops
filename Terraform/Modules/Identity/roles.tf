@@ -50,8 +50,13 @@ resource "aws_iam_role" "eks-control-plane-role" {
 }
 
 resource "aws_iam_role_policy_attachment" "eks-control-plane-policy" {
+  for_each = {
+    "1" = "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy",
+    "2" = "arn:aws:iam::aws:policy/AmazonEKSVPCResourceController",
+  }
+
   role       = aws_iam_role.eks-control-plane-role.name
-  policy_arn = "arn:aws:iam::aws:policy/AmazonEKSClusterPolicy"
+  policy_arn = each.value
 }
 
 resource "aws_iam_role" "eks-worker-nodes-role" {
