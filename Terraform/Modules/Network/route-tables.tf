@@ -16,8 +16,8 @@ resource "aws_route_table_association" "public-routes" {
 }
 
 resource "aws_route_table" "private-route-table" {
-  vpc_id = aws_vpc.main-vpc.id
   tags   = { Name = "private-route-table" }
+  vpc_id = aws_vpc.main-vpc.id
 
   route {
     cidr_block     = "0.0.0.0/0"

@@ -28,6 +28,29 @@ resource "aws_security_group" "bastion-server-sg" {
   tags = { Name = "bastion-server-sg" }
 }
 
+resource "aws_security_group" "control-plane-sg" {
+  name        = "control-plane-sg"
+  description = "Allow HTTPS inbound traffic and all outbound traffic"
+
+  vpc_id = aws_vpc.main-vpc.id
+
+  ingress {
+    from_port   = 443
+    to_port     = 443
+    protocol    = "tcp"
+    cidr_blocks = [aws_vpc.main-vpc.cidr_block]
+  }
+
+  egress {
+    from_port   = 0
+    to_port     = 0
+    protocol    = "-1"
+    cidr_blocks = ["0.0.0.0/0"]
+  }
+
+  tags = { Name = "control-plane-sg" }
+}
+
 resource "aws_security_group" "worker-nodes-sg" {
   name        = "worker-nodes-sg"
   description = "Allow SSH and HTTPS inbound traffic and all outbound traffic, also allow node-to-node communications"
