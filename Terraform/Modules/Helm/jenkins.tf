@@ -12,6 +12,8 @@ resource "helm_release" "jenkins" {
     templatefile("${path.module}/jenkins-values.yaml", {
       JENKINS_USERNAME = var.jenkins-username,
       JENKINS_PASSWORD = var.jenkins-password,
+      JENKINS_PVC      = var.jenkins-custom-pvc,
+      JENKINS_EBS_ZONE = var.jenkins-ebs-zone
     })
   ]
 }

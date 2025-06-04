@@ -14,6 +14,14 @@ variable "cluster-certificate" {
   type = string
 }
 
+variable "jenkins-ebs-zone" {
+  type = string
+}
+
+variable "jenkins-custom-pvc" {
+  type = string
+}
+
 variable "jenkins-username" {
   type = string
 }

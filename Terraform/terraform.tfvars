@@ -43,3 +43,5 @@ ecr-repositories = ["frontend-repo", "backend-repo"]
 nat-gw-subnet-name         = "public-subnet-1"
 bastion-server-subnet-name = "public-subnet-2"
 bastion-server-ami-id      = "ami-0a7d80731ae1b2435"
+
+jenkins-ebs-zone = "us-east-1a"

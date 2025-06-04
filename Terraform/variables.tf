@@ -69,3 +69,7 @@ variable "jenkins-username" {
 variable "jenkins-password" {
   type = string
 }
+
+variable "jenkins-ebs-zone" {
+  type = string
+}

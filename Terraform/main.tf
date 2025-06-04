@@ -69,6 +69,8 @@ module "helm" {
   cluster-certificate  = module.cluster.cluster-certificate
   cluster-endpoint     = module.cluster.cluster-endpoint
   cluster-name         = module.cluster.cluster-name
+  jenkins-custom-pvc   = module.kubernetes.jenkins-custom-pvc
+  jenkins-ebs-zone     = var.jenkins-ebs-zone
   jenkins-username     = var.jenkins-username
   jenkins-password     = var.jenkins-password
 }
