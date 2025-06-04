@@ -1,0 +1,8 @@
+controller:
+  admin:
+    username: "${JENKINS_USERNAME}"
+    password: "${JENKINS_PASSWORD}"
+  serviceType: "LoadBalancer"
+persistence:
+  storageClass: "gp2"
+  size: 8Gi
