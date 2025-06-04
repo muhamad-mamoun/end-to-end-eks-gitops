@@ -15,3 +15,13 @@ resource "kubernetes_cluster_role_binding" "admins-role-binding" {
     name      = "masters"
   }
 }
+
+resource "kubernetes_service_account" "aws-ecr-access-sa" {
+  metadata {
+    namespace = "jenkins"
+    name      = "aws-ecr-access-sa"
+    annotations = {
+      "eks.amazonaws.com/role-arn" = var.eks-ecr-access-role-arn
+    }
+  }
+}
