@@ -9,7 +9,7 @@ resource "helm_release" "jenkins" {
   namespace        = "jenkins"
 
   values = [
-    templatefile("${path.module}/jenkins-values.yaml", {
+    templatefile("${path.module}/values/jenkins.yaml", {
       JENKINS_USERNAME = var.jenkins-username,
       JENKINS_PASSWORD = var.jenkins-password,
       JENKINS_PVC      = var.jenkins-custom-pvc,

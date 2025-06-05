@@ -2,9 +2,10 @@ controller:
   admin:
     username: "${JENKINS_USERNAME}"
     password: "${JENKINS_PASSWORD}"
-  serviceType: "LoadBalancer"
+  serviceType: "ClusterIP"
   nodeSelector:
     topology.kubernetes.io/zone: "${JENKINS_EBS_ZONE}"
+  jenkinsUriPrefix: "/jenkins"
 persistence:
   existingClaim: "${JENKINS_PVC}"
   storageClass: "-"
