@@ -38,7 +38,7 @@ private-subnets = [
   }
 ]
 
-ecr-repositories = ["frontend-repo", "backend-repo"]
+ecr-repositories = ["frontend", "backend"]
 
 nat-gw-subnet-name         = "public-subnet-1"
 bastion-server-subnet-name = "public-subnet-2"

@@ -34,7 +34,7 @@ spec:
                         sh '''
                         /kaniko/executor --dockerfile `pwd`/frontend/Dockerfile \
                                          --context `pwd`/frontend \
-                                         --destination=729798775365.dkr.ecr.us-east-1.amazonaws.com/frontend-repo:latest
+                                         --destination=729798775365.dkr.ecr.us-east-1.amazonaws.com/frontend:latest
                         '''
                     }
                 }
@@ -48,7 +48,7 @@ spec:
                         sh '''
                         /kaniko/executor --dockerfile `pwd`/backend/Dockerfile \
                                          --context `pwd`/backend \
-                                         --destination=729798775365.dkr.ecr.us-east-1.amazonaws.com/backend-repo:latest
+                                         --destination=729798775365.dkr.ecr.us-east-1.amazonaws.com/backend:latest
                         '''
                     }
                 }
