@@ -31,11 +31,11 @@ spec:
             steps {
                 container('kaniko') {
                     script {
-                        sh '''
+                        sh """
                         /kaniko/executor --dockerfile `pwd`/frontend/Dockerfile \
                                          --context `pwd`/frontend \
-                                         --destination=729798775365.dkr.ecr.us-east-1.amazonaws.com/frontend:latest
-                        '''
+                                         --destination=729798775365.dkr.ecr.us-east-1.amazonaws.com/frontend:v1.${env.BUILD_NUMBER}
+                        """
                     }
                 }
             }
@@ -45,11 +45,11 @@ spec:
             steps {
                 container('kaniko') {
                     script {
-                        sh '''
+                        sh """
                         /kaniko/executor --dockerfile `pwd`/backend/Dockerfile \
                                          --context `pwd`/backend \
-                                         --destination=729798775365.dkr.ecr.us-east-1.amazonaws.com/backend:latest
-                        '''
+                                         --destination=729798775365.dkr.ecr.us-east-1.amazonaws.com/backend:v1.${env.BUILD_NUMBER}
+                        """
                     }
                 }
             }
