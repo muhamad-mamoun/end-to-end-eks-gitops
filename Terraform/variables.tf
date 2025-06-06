@@ -70,6 +70,10 @@ variable "jenkins-password" {
   type = string
 }
 
+variable "jenkins-volume-id" {
+  type = string
+}
+
 variable "jenkins-ebs-zone" {
   type = string
 }

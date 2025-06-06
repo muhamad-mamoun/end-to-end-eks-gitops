@@ -8,7 +8,7 @@ resource "kubernetes_persistent_volume" "jenkins-pv" {
 
     persistent_volume_source {
       aws_elastic_block_store {
-        volume_id = "vol-0648a3c6acb5f8b01"
+        volume_id = var.jenkins-volume-id
         fs_type   = "ext4"
       }
     }

@@ -55,6 +55,7 @@ module "kubernetes" {
   cluster-endpoint        = module.cluster.cluster-endpoint
   cluster-name            = module.cluster.cluster-name
   eks-ecr-access-role-arn = module.open-id-connect.eks-ecr-access-role-arn
+  jenkins-volume-id       = var.jenkins-volume-id
 }
 
 module "open-id-connect" {

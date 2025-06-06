@@ -17,3 +17,7 @@ variable "cluster-certificate" {
 variable "eks-ecr-access-role-arn" {
   type = string
 }
+
+variable "jenkins-volume-id" {
+  type = string
+}
