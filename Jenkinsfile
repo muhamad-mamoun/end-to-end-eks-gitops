@@ -7,7 +7,7 @@ kind: Pod
 metadata:
   name: kaniko
 spec:
-  serviceAccountName: aws-ecr-access-sa
+  serviceAccountName: aws-ecr-write-sa
   containers:
     - name: kaniko
       imagePullPolicy: IfNotPresent
