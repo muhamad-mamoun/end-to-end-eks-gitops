@@ -33,3 +33,15 @@ variable "jenkins-password" {
 variable "eks-ebs-csi-role-arn" {
   type = string
 }
+
+variable "argocd-hashed-password" {
+  type = string
+}
+
+variable "argo-image-updater-sa" {
+  type = string
+}
+
+variable "ecr-registry-url" {
+  type = string
+}

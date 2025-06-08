@@ -1,0 +1,38 @@
+configs:
+  params:
+    server.insecure: true
+  secret:
+    argocdServerAdminPassword: "${ARGOCD_ADMIN_PASSWORD}"
+    argocd.insecure: true
+
+server:
+  ingress:
+    enabled: true
+    ingressClassName: "nginx"
+    annotations:
+      nginx.ingress.kubernetes.io/disable-auth: "true"
+      nginx.ingress.kubernetes.io/ssl-redirect: "false"
+      nginx.ingress.kubernetes.io/force-ssl-redirect: "false"
+      nginx.ingress.kubernetes.io/backend-protocol: "HTTP"
+      kubernetes.io/ingress.allow-http: "true"
+
+    tls: []
+
+    extraRules:
+      - http:
+          paths:
+            - path: /argocd
+              pathType: Prefix
+              backend:
+                service:
+                  name: '{{ include "argo-cd.server.fullname" . }}'
+                  port:
+                    name: "{{ .Values.server.service.servicePortHttpsName }}"
+    pathType: Prefix
+    service:
+      port:
+        name: http
+
+    extraArgs:
+      - --insecure
+      - --rootpath=/argocd

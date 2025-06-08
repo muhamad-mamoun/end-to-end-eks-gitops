@@ -1,0 +1,20 @@
+serviceAccount:
+  create: false
+  name: "${ARGO_IMAGE_UPDATER_SA}"
+
+config:
+  registries:
+    - name: ECR
+      api_url: "https://${REPO_URL}"
+      prefix: "${REPO_URL}"
+      ping: yes
+      insecure: no
+      default: true
+      credentials: ext:/scripts/auth.sh
+
+authScripts:
+  enabled: true
+  scripts:
+    auth.sh: |
+      #!/bin/sh
+      HOME=/tmp aws ecr --region us-east-1 get-authorization-token --output text --query 'authorizationData[].authorizationToken' | base64 -d
