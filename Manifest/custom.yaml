@@ -1,0 +1,96 @@
+frontend:
+  replicaCount: 3
+  image:
+    repository: m2moun/todo-list-app-frontend
+    tag: v1.0
+  env:
+    - name: BACKEND_DNS
+      valueFrom:
+        configMapKeyRef:
+          name: app-config
+          key: BACKEND_DNS
+    - name: BACKEND_PORT
+      valueFrom:
+        configMapKeyRef:
+          name: app-config
+          key: BACKEND_PORT
+
+backend:
+  replicaCount: 3
+  image:
+    repository: m2moun/todo-list-app-backend
+    tag: v1.0
+  service:
+    port: 3000
+  envFrom:
+    - configMapRef:
+        name: app-config
+    - secretRef:
+        name: app-secrets
+  startupProbe:
+    initialDelaySeconds: 10
+    httpGet:
+      path: /health
+      port: 3000
+
+database:
+  image:
+    repository: mysql
+    tag: latest
+  service:
+    port: 3306
+  volumes:
+    - name: mysql-data
+      hostPath:
+        path: /data
+        pathType: DirectoryOrCreate
+  volumeMounts:
+    - name: mysql-data
+      mountPath: /var/lib/mysql
+  nodeSelector:
+    topology.kubernetes.io/zone: us-east-1b
+  env:
+    - name: MYSQL_ROOT_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: app-secrets
+          key: DB_PASSWORD
+    - name: MYSQL_USER
+      valueFrom:
+        secretKeyRef:
+          name: app-secrets
+          key: DB_USER
+    - name: MYSQL_PASSWORD
+      valueFrom:
+        secretKeyRef:
+          name: app-secrets
+          key: DB_PASSWORD
+    - name: MYSQL_DATABASE
+      valueFrom:
+        configMapKeyRef:
+          name: app-config
+          key: DB_NAME
+
+ingress:
+  enabled: true
+  className: "nginx"
+  annotations:
+    kubernetes.io/ingress.class: "nginx"
+    nginx.ingress.kubernetes.io/use-regex: "true"
+  hosts:
+    - host: "todo-app.com"
+      paths:
+        - path: /
+          pathType: Prefix
+
+appConfig:
+  PORT: "3000"
+  DB_NAME: todo_app
+  DB_HOST: database-svc
+  BACKEND_DNS: backend-svc
+  BACKEND_PORT: "3000"
+
+appSecrets:
+  JWT_SECRET: "RHVtbXlTZWNyZXRGb3JUZXN0"
+  DB_USER: "YWRtaW4="
+  DB_PASSWORD: "YWRtaW4="
