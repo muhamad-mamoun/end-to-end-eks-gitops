@@ -48,8 +48,8 @@ resource "aws_iam_role_policy" "eks-ebs-csi-policy" {
   })
 }
 
-resource "aws_iam_role" "eks-ecr-access-role" {
-  name = "eks-ecr-access-role"
+resource "aws_iam_role" "eks-ecr-write-role" {
+  name = "eks-ecr-write-role"
 
   assume_role_policy = jsonencode({
     Version = "2012-10-17",
@@ -57,14 +57,14 @@ resource "aws_iam_role" "eks-ecr-access-role" {
       Effect    = "Allow",
       Action    = "sts:AssumeRoleWithWebIdentity",
       Principal = { Federated = aws_iam_openid_connect_provider.oidc-provider.arn },
-      Condition = { StringEquals = { "${replace(aws_iam_openid_connect_provider.oidc-provider.url, "https://", "")}:sub" = "system:serviceaccount:jenkins:aws-ecr-access-sa" } }
+      Condition = { StringEquals = { "${replace(aws_iam_openid_connect_provider.oidc-provider.url, "https://", "")}:sub" = "system:serviceaccount:jenkins:aws-ecr-write-sa" } }
     }]
   })
 }
 
-resource "aws_iam_role_policy" "eks-ecr-access-policy" {
-  name = "eks-ecr-access-policy"
-  role = aws_iam_role.eks-ecr-access-role.id
+resource "aws_iam_role_policy" "eks-ecr-write-policy" {
+  name = "eks-ecr-write-policy"
+  role = aws_iam_role.eks-ecr-write-role.id
 
   policy = jsonencode({
     Version = "2012-10-17"
@@ -83,6 +83,49 @@ resource "aws_iam_role_policy" "eks-ecr-access-policy" {
       {
         Effect   = "Allow"
         Action   = "ecr:GetAuthorizationToken"
+        Resource = "*"
+      }
+    ]
+  })
+}
+
+resource "aws_iam_role" "eks-ecr-read-role" {
+  name = "eks-ecr-read-role"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [{
+      Effect    = "Allow",
+      Action    = "sts:AssumeRoleWithWebIdentity",
+      Principal = { Federated = aws_iam_openid_connect_provider.oidc-provider.arn },
+      Condition = { StringEquals = { "${replace(aws_iam_openid_connect_provider.oidc-provider.url, "https://", "")}:sub" = "system:serviceaccount:argocd:aws-ecr-read-sa" } }
+    }]
+  })
+}
+
+resource "aws_iam_role_policy" "eks-ecr-read-policy" {
+  name = "eks-ecr-read-policy"
+  role = aws_iam_role.eks-ecr-read-role.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "ecr:GetAuthorizationToken",
+          "ecr:BatchCheckLayerAvailability",
+          "ecr:BatchGetImage",
+          "ecr:GetDownloadUrlForLayer",
+          "ecr:DescribeImages",
+          "ecr:ListImages",
+          "ecr:GetRepositoryPolicy",
+          "ecr:DescribeRepositories",
+          "ecr:GetLifecyclePolicy",
+          "ecr:GetLifecyclePolicyPreview",
+          "ecr:ListTagsForResource",
+          "ecr:DescribeImageScanFindings"
+        ]
         Resource = "*"
       }
     ]
