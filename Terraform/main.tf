@@ -49,15 +49,21 @@ module "cluster" {
 }
 
 module "kubernetes" {
-  source                  = "./Modules/Kubernetes"
-  aws-profile             = var.aws-profile
-  cluster-certificate     = module.cluster.cluster-certificate
-  cluster-endpoint        = module.cluster.cluster-endpoint
-  cluster-name            = module.cluster.cluster-name
-  eks-ecr-access-role-arn = module.open-id-connect.eks-ecr-access-role-arn
-  jenkins-volume-id       = var.jenkins-volume-id
-  application-namespace   = var.application-namespace
-  application-volume-id   = var.application-volume-id
+  source                 = "./Modules/Kubernetes"
+  aws-profile            = var.aws-profile
+  cluster-certificate    = module.cluster.cluster-certificate
+  cluster-endpoint       = module.cluster.cluster-endpoint
+  cluster-name           = module.cluster.cluster-name
+  eks-ecr-write-role-arn = module.open-id-connect.eks-ecr-write-role-arn
+  eks-ecr-read-role-arn  = module.open-id-connect.eks-ecr-read-role-arn
+  jenkins-volume-id      = var.jenkins-volume-id
+  github-username        = var.github-username
+  github-password        = var.github-password
+  gitops-repo-url        = var.gitops-repo-url
+  application-namespace  = var.application-namespace
+  application-volume-id  = var.application-volume-id
+  ecr-frontend-repo-url  = module.registry.ecr-frontend-repo-url
+  ecr-backend-repo-url   = module.registry.ecr-backend-repo-url
 }
 
 module "open-id-connect" {
@@ -66,20 +72,35 @@ module "open-id-connect" {
 }
 
 module "helm" {
-  source               = "./Modules/Helm"
-  aws-profile          = var.aws-profile
-  eks-ebs-csi-role-arn = module.open-id-connect.eks-ebs-csi-role-arn
-  cluster-certificate  = module.cluster.cluster-certificate
-  cluster-endpoint     = module.cluster.cluster-endpoint
-  cluster-name         = module.cluster.cluster-name
-  jenkins-custom-pvc   = module.kubernetes.jenkins-custom-pvc
-  jenkins-ebs-zone     = var.jenkins-ebs-zone
-  jenkins-username     = var.jenkins-username
-  jenkins-password     = var.jenkins-password
+  source                 = "./Modules/Helm"
+  aws-profile            = var.aws-profile
+  eks-ebs-csi-role-arn   = module.open-id-connect.eks-ebs-csi-role-arn
+  cluster-certificate    = module.cluster.cluster-certificate
+  cluster-endpoint       = module.cluster.cluster-endpoint
+  cluster-name           = module.cluster.cluster-name
+  jenkins-custom-pvc     = module.kubernetes.jenkins-custom-pvc
+  jenkins-ebs-zone       = var.jenkins-ebs-zone
+  jenkins-username       = var.jenkins-username
+  jenkins-password       = var.jenkins-password
+  argocd-hashed-password = var.argocd-hashed-password
+  argo-image-updater-sa  = module.kubernetes.argo-image-updater-sa
+  ecr-registry-url       = module.registry.ecr-registry-url
 }
 
 resource "null_resource" "kubeconfig" {
   provisioner "local-exec" {
     command = "aws eks update-kubeconfig --profile ${var.aws-profile} --region ${var.region} --name ${module.cluster.cluster-name}"
+  }
+}
+
+resource "null_resource" "push-images" {
+  provisioner "local-exec" {
+    command = <<END
+    aws ecr get-login-password --profile ${var.aws-profile} --region ${var.region} | docker login --username AWS --password-stdin ${module.registry.ecr-registry-url}
+    docker tag m2moun/todo-list-app-frontend:v1.0 ${module.registry.ecr-frontend-repo-url}:v1.0
+    docker tag m2moun/todo-list-app-backend:v1.0 ${module.registry.ecr-backend-repo-url}:v1.0
+    docker push ${module.registry.ecr-frontend-repo-url}:v1.0
+    docker push ${module.registry.ecr-backend-repo-url}:v1.0
+    END
   }
 }

@@ -85,3 +85,17 @@ variable "application-namespace" {
 variable "application-volume-id" {
   type = string
 }
+
+variable "argocd-hashed-password" {
+  type = string
+}
+
+variable "github-username" {
+  type = string
+}
+variable "github-password" {
+  type = string
+}
+variable "gitops-repo-url" {
+  type = string
+}
