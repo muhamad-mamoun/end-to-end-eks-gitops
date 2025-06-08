@@ -4,6 +4,7 @@ resource "helm_release" "jenkins" {
   name       = "jenkins"
   version    = "5.8.56"
 
+  atomic           = true
   cleanup_on_fail  = true
   create_namespace = true
   namespace        = "jenkins"

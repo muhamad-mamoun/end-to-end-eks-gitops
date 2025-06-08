@@ -4,6 +4,7 @@ resource "helm_release" "argocd-image-updater" {
   name       = "argocd-image-updater"
   version    = "0.12.2"
 
+  atomic           = true
   cleanup_on_fail  = true
   create_namespace = true
   namespace        = "argocd"

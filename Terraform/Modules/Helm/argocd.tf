@@ -4,6 +4,7 @@ resource "helm_release" "argocd" {
   name       = "argocd"
   version    = "8.0.15"
 
+  atomic           = true
   cleanup_on_fail  = true
   create_namespace = true
   namespace        = "argocd"
