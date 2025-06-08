@@ -16,12 +16,22 @@ resource "kubernetes_cluster_role_binding" "admins-role-binding" {
   }
 }
 
-resource "kubernetes_service_account" "aws-ecr-access-sa" {
+resource "kubernetes_service_account" "aws-ecr-write-sa" {
   metadata {
     namespace = "jenkins"
-    name      = "aws-ecr-access-sa"
+    name      = "aws-ecr-write-sa"
     annotations = {
-      "eks.amazonaws.com/role-arn" = var.eks-ecr-access-role-arn
+      "eks.amazonaws.com/role-arn" = var.eks-ecr-write-role-arn
+    }
+  }
+}
+
+resource "kubernetes_service_account" "aws-ecr-read-sa" {
+  metadata {
+    namespace = "argocd"
+    name      = "aws-ecr-read-sa"
+    annotations = {
+      "eks.amazonaws.com/role-arn" = var.eks-ecr-read-role-arn
     }
   }
 }

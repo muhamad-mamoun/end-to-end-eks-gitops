@@ -14,11 +14,25 @@ variable "cluster-certificate" {
   type = string
 }
 
-variable "eks-ecr-access-role-arn" {
+variable "eks-ecr-read-role-arn" {
+  type = string
+}
+
+variable "eks-ecr-write-role-arn" {
   type = string
 }
 
 variable "jenkins-volume-id" {
+  type = string
+}
+
+variable "github-username" {
+  type = string
+}
+variable "github-password" {
+  type = string
+}
+variable "gitops-repo-url" {
   type = string
 }
 
@@ -27,5 +41,13 @@ variable "application-namespace" {
 }
 
 variable "application-volume-id" {
+  type = string
+}
+
+variable "ecr-frontend-repo-url" {
+  type = string
+}
+
+variable "ecr-backend-repo-url" {
   type = string
 }
