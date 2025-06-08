@@ -21,3 +21,11 @@ variable "eks-ecr-access-role-arn" {
 variable "jenkins-volume-id" {
   type = string
 }
+
+variable "application-namespace" {
+  type = string
+}
+
+variable "application-volume-id" {
+  type = string
+}
