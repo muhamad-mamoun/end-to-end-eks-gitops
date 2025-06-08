@@ -56,6 +56,8 @@ module "kubernetes" {
   cluster-name            = module.cluster.cluster-name
   eks-ecr-access-role-arn = module.open-id-connect.eks-ecr-access-role-arn
   jenkins-volume-id       = var.jenkins-volume-id
+  application-namespace   = var.application-namespace
+  application-volume-id   = var.application-volume-id
 }
 
 module "open-id-connect" {
