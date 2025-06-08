@@ -77,3 +77,11 @@ variable "jenkins-volume-id" {
 variable "jenkins-ebs-zone" {
   type = string
 }
+
+variable "application-namespace" {
+  type = string
+}
+
+variable "application-volume-id" {
+  type = string
+}
