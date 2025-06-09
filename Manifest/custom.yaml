@@ -89,8 +89,3 @@ appConfig:
   DB_HOST: database-svc
   BACKEND_DNS: backend-svc
   BACKEND_PORT: "3000"
-
-appSecrets:
-  JWT_SECRET: "RHVtbXlTZWNyZXRGb3JUZXN0"
-  DB_USER: "YWRtaW4="
-  DB_PASSWORD: "YWRtaW4="

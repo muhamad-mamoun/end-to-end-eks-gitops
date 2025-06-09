@@ -227,6 +227,5 @@ ingress:
 ########################################## Secret and Config #######################################
 ####################################################################################################
 
-# Configure application secret and configMap content
-appSecrets: {}
+# Configure application configMap content
 appConfig: {}
