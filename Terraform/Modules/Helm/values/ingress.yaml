@@ -1,0 +1,5 @@
+controller:
+  service:
+    enabled: true
+  admissionWebhooks:
+    enabled: true

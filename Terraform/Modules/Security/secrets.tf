@@ -1,41 +1,15 @@
-resource "aws_secretsmanager_secret" "backend-jwt-secret" {
-  name                    = "backend-jwt-secret"
+resource "aws_secretsmanager_secret" "application-secrets" {
+  name                    = "application-secrets"
   recovery_window_in_days = 0
 }
 
 resource "aws_secretsmanager_secret_version" "backend-jwt-secret-value" {
-  secret_id     = aws_secretsmanager_secret.backend-jwt-secret.id
-  secret_string = var.backend-jwt-secret
-}
-
-resource "aws_secretsmanager_secret" "database-root-password" {
-  name                    = "database-root-password"
-  recovery_window_in_days = 0
-}
-
-resource "aws_secretsmanager_secret_version" "database-root-password-value" {
-  secret_id     = aws_secretsmanager_secret.database-root-password.id
-  secret_string = var.database-root-password
-}
-
-resource "aws_secretsmanager_secret" "database-username" {
-  name                    = "database-username"
-  recovery_window_in_days = 0
-}
-
-resource "aws_secretsmanager_secret_version" "database-username-value" {
-  secret_id     = aws_secretsmanager_secret.database-username.id
-  secret_string = var.database-username
-}
-
-resource "aws_secretsmanager_secret" "database-password" {
-  name                    = "database-password"
-  recovery_window_in_days = 0
-}
-
-resource "aws_secretsmanager_secret_version" "database-password-value" {
-  secret_id     = aws_secretsmanager_secret.database-password.id
-  secret_string = var.database-password
+  secret_id = aws_secretsmanager_secret.application-secrets.id
+  secret_string = jsonencode({
+    JWT_SECRET  = var.backend-jwt-secret
+    DB_USER     = var.database-username
+    DB_PASSWORD = var.database-password
+  })
 }
 
 resource "aws_secretsmanager_secret" "jenkins-username" {

@@ -1,0 +1,3 @@
+serviceAccount:
+  create: false
+  name: "aws-sm-read-sa"

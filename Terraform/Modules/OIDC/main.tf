@@ -131,3 +131,41 @@ resource "aws_iam_role_policy" "eks-ecr-read-policy" {
     ]
   })
 }
+
+resource "aws_iam_role" "aws-sm-read-role" {
+  name = "aws-sm-read-role"
+
+  assume_role_policy = jsonencode({
+    Version = "2012-10-17",
+    Statement = [{
+      Effect    = "Allow",
+      Action    = "sts:AssumeRoleWithWebIdentity",
+      Principal = { Federated = aws_iam_openid_connect_provider.oidc-provider.arn },
+      Condition = { StringEquals = { "${replace(aws_iam_openid_connect_provider.oidc-provider.url, "https://", "")}:sub" = "system:serviceaccount:eso:aws-sm-read-sa" } }
+    }]
+  })
+}
+
+resource "aws_iam_role_policy" "aws-sm-read-policy" {
+  name = "aws-sm-read-policy"
+  role = aws_iam_role.aws-sm-read-role.id
+
+  policy = jsonencode({
+    Version = "2012-10-17"
+    Statement = [
+      {
+        Effect = "Allow"
+        Action = [
+          "secretsmanager:GetRandomPassword",
+          "secretsmanager:GetResourcePolicy",
+          "secretsmanager:GetSecretValue",
+          "secretsmanager:DescribeSecret",
+          "secretsmanager:ListSecretVersionIds",
+          "secretsmanager:ListSecrets",
+          "secretsmanager:BatchGetSecretValue"
+        ]
+        Resource = "*"
+      }
+    ]
+  })
+}

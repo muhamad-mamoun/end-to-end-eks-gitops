@@ -4,8 +4,6 @@ resource "helm_release" "jenkins" {
   name       = "jenkins"
   version    = "5.8.56"
 
-  atomic           = true
-  cleanup_on_fail  = true
   create_namespace = true
   namespace        = "jenkins"
 
@@ -17,4 +15,6 @@ resource "helm_release" "jenkins" {
       JENKINS_EBS_ZONE = var.jenkins-ebs-zone
     })
   ]
+
+  depends_on = [helm_release.ebs-csi-driver, helm_release.ingress]
 }

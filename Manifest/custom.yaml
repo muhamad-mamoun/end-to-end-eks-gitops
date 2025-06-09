@@ -18,7 +18,7 @@ frontend:
 backend:
   replicaCount: 3
   image:
-    repository: 729798775365.dkr.ecr.us-east-1.amazonaws.com/frontend
+    repository: 729798775365.dkr.ecr.us-east-1.amazonaws.com/backend
     tag: v1.0
   service:
     port: 3000

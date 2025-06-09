@@ -24,6 +24,8 @@ resource "kubernetes_service_account" "aws-ecr-write-sa" {
       "eks.amazonaws.com/role-arn" = var.eks-ecr-write-role-arn
     }
   }
+
+  depends_on = [kubernetes_namespace.jenkins-namespace]
 }
 
 resource "kubernetes_service_account" "aws-ecr-read-sa" {
@@ -32,6 +34,18 @@ resource "kubernetes_service_account" "aws-ecr-read-sa" {
     name      = "aws-ecr-read-sa"
     annotations = {
       "eks.amazonaws.com/role-arn" = var.eks-ecr-read-role-arn
+    }
+  }
+
+  depends_on = [kubernetes_namespace.argocd-namespace]
+}
+
+resource "kubernetes_service_account" "aws-sm-read-sa" {
+  metadata {
+    namespace = "eso"
+    name      = "aws-sm-read-sa"
+    annotations = {
+      "eks.amazonaws.com/role-arn" = var.aws-sm-read-role-arn
     }
   }
 }

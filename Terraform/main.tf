@@ -64,6 +64,7 @@ module "kubernetes" {
   application-volume-id  = var.application-volume-id
   ecr-frontend-repo-url  = module.registry.ecr-frontend-repo-url
   ecr-backend-repo-url   = module.registry.ecr-backend-repo-url
+  aws-sm-read-role-arn   = module.open-id-connect.aws-sm-read-role-arn
 }
 
 module "open-id-connect" {

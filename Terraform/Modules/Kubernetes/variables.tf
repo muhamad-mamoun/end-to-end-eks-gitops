@@ -22,6 +22,10 @@ variable "eks-ecr-write-role-arn" {
   type = string
 }
 
+variable "aws-sm-read-role-arn" {
+  type = string
+}
+
 variable "jenkins-volume-id" {
   type = string
 }

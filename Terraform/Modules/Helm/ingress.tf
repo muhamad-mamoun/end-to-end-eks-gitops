@@ -4,8 +4,8 @@ resource "helm_release" "ingress" {
   name       = "ingress-nginx"
   version    = "4.12.2"
 
-  atomic           = true
-  cleanup_on_fail  = true
   create_namespace = true
   namespace        = "ingress"
+
+  values = [file("${path.module}/values/ingress.yaml")]
 }
