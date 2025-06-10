@@ -1,6 +1,6 @@
 serviceAccount:
   create: false
-  name: "${ARGO_IMAGE_UPDATER_SA}"
+  name: "aws-ecr-read-sa"
 
 config:
   registries:

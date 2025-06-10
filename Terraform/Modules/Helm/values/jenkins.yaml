@@ -10,5 +10,5 @@ controller:
     - github:1.43.0
     - github-api:1.321-488.v9b_c0da_9533f8
 persistence:
-  existingClaim: "${JENKINS_PVC}"
+  existingClaim: "jenkins-pvc"
   storageClass: "-"

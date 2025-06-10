@@ -40,7 +40,19 @@ variable "gitops-repo-url" {
   type = string
 }
 
+variable "ingress-namespace" {
+  type = string
+}
+
+variable "argocd-namespace" {
+  type = string
+}
+
 variable "application-namespace" {
+  type = string
+}
+
+variable "eso-namespace" {
   type = string
 }
 

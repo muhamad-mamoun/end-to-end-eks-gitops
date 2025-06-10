@@ -43,8 +43,21 @@ module "cluster" {
   eks-control-plane-sg-id    = module.network.control-plane-sg-id
   eks-worker-nodes-sg-id     = module.network.worker-nodes-sg-id
   worker-nodes-key-name      = module.security.bastion-server-key-name
-
-  depends_on = [module.identity, module.identity, module.security]
+}
+module "helm" {
+  source                 = "./Modules/Helm"
+  aws-profile            = var.aws-profile
+  eks-ebs-csi-role-arn   = module.open-id-connect.eks-ebs-csi-role-arn
+  cluster-certificate    = module.cluster.cluster-certificate
+  cluster-endpoint       = module.cluster.cluster-endpoint
+  cluster-name           = module.cluster.cluster-name
+  jenkins-ebs-zone       = var.jenkins-ebs-zone
+  jenkins-username       = var.jenkins-username
+  jenkins-password       = var.jenkins-password
+  argocd-hashed-password = var.argocd-hashed-password
+  ecr-registry-url       = module.registry.ecr-registry-url
+  jenkins-namespace      = module.kubernetes.jenkins-namespace
+  aws-sm-read-role-arn   = module.open-id-connect.aws-sm-read-role-arn
 }
 
 module "kubernetes" {
@@ -53,17 +66,20 @@ module "kubernetes" {
   cluster-certificate    = module.cluster.cluster-certificate
   cluster-endpoint       = module.cluster.cluster-endpoint
   cluster-name           = module.cluster.cluster-name
-  eks-ecr-write-role-arn = module.open-id-connect.eks-ecr-write-role-arn
-  eks-ecr-read-role-arn  = module.open-id-connect.eks-ecr-read-role-arn
+  application-namespace  = var.application-namespace
+  application-volume-id  = var.application-volume-id
   jenkins-volume-id      = var.jenkins-volume-id
   github-username        = var.github-username
   github-password        = var.github-password
   gitops-repo-url        = var.gitops-repo-url
-  application-namespace  = var.application-namespace
-  application-volume-id  = var.application-volume-id
   ecr-frontend-repo-url  = module.registry.ecr-frontend-repo-url
   ecr-backend-repo-url   = module.registry.ecr-backend-repo-url
+  eks-ecr-write-role-arn = module.open-id-connect.eks-ecr-write-role-arn
+  eks-ecr-read-role-arn  = module.open-id-connect.eks-ecr-read-role-arn
   aws-sm-read-role-arn   = module.open-id-connect.aws-sm-read-role-arn
+  ingress-namespace      = module.helm.ingress-namespace
+  argocd-namespace       = module.helm.argocd-namespace
+  eso-namespace          = module.helm.eso-namespace
 }
 
 module "open-id-connect" {
@@ -71,21 +87,6 @@ module "open-id-connect" {
   eks-iodc-provider = module.cluster.eks-iodc-provider
 }
 
-module "helm" {
-  source                 = "./Modules/Helm"
-  aws-profile            = var.aws-profile
-  eks-ebs-csi-role-arn   = module.open-id-connect.eks-ebs-csi-role-arn
-  cluster-certificate    = module.cluster.cluster-certificate
-  cluster-endpoint       = module.cluster.cluster-endpoint
-  cluster-name           = module.cluster.cluster-name
-  jenkins-custom-pvc     = module.kubernetes.jenkins-custom-pvc
-  jenkins-ebs-zone       = var.jenkins-ebs-zone
-  jenkins-username       = var.jenkins-username
-  jenkins-password       = var.jenkins-password
-  argocd-hashed-password = var.argocd-hashed-password
-  argo-image-updater-sa  = module.kubernetes.argo-image-updater-sa
-  ecr-registry-url       = module.registry.ecr-registry-url
-}
 
 resource "null_resource" "kubeconfig" {
   provisioner "local-exec" {

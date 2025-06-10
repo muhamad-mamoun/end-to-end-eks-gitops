@@ -4,7 +4,7 @@ apiVersion: argoproj.io/v1alpha1
 kind: Application
 metadata:
   name: web-app
-  namespace: ${kubernetes_namespace.argocd-namespace.metadata[0].name}
+  namespace: ${var.argocd-namespace}
   annotations:
     argocd-image-updater.argoproj.io/image-list: frontend=${var.ecr-frontend-repo-url}:v1.x,backend=${var.ecr-backend-repo-url}:v1.x
     argocd-image-updater.argoproj.io/frontend.helm.image-name: frontend.image.repository

@@ -18,10 +18,6 @@ variable "jenkins-ebs-zone" {
   type = string
 }
 
-variable "jenkins-custom-pvc" {
-  type = string
-}
-
 variable "jenkins-username" {
   type = string
 }
@@ -38,10 +34,14 @@ variable "argocd-hashed-password" {
   type = string
 }
 
-variable "argo-image-updater-sa" {
+variable "ecr-registry-url" {
   type = string
 }
 
-variable "ecr-registry-url" {
+variable "jenkins-namespace" {
+  type = string
+}
+
+variable "aws-sm-read-role-arn" {
   type = string
 }

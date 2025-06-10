@@ -1,3 +1,5 @@
 serviceAccount:
-  create: false
+  create: true
   name: "aws-sm-read-sa"
+  annotations:
+    eks.amazonaws.com/role-arn: ${SM_READ_ROLE_ARN}

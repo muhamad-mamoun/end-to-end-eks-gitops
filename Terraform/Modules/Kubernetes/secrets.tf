@@ -1,7 +1,7 @@
 resource "kubernetes_secret" "git-creds" {
   metadata {
     name      = "git-creds"
-    namespace = kubernetes_namespace.argocd-namespace.metadata[0].name
+    namespace = var.argocd-namespace
     labels = {
       "argocd.argoproj.io/secret-type" = "repository"
     }
@@ -30,11 +30,9 @@ spec:
       auth:
         jwt:
           serviceAccountRef:
-            name: aws-sm-read-sa
-            namespace: eso
+            name: "aws-sm-read-sa"
+            namespace: ${var.eso-namespace}
   END
-
-  depends_on = [kubernetes_service_account.aws-sm-read-sa]
 }
 
 resource "kubectl_manifest" "application-external-secret" {
@@ -43,7 +41,7 @@ apiVersion: external-secrets.io/v1
 kind: ExternalSecret
 metadata:
   name: app-external-secrets
-  namespace: webapp
+  namespace: ${kubernetes_namespace.application-namespace.metadata[0].name}
 spec:
   refreshInterval: 1h
   secretStoreRef:
@@ -51,12 +49,12 @@ spec:
     kind: ClusterSecretStore
   target:
     name: app-secrets
-    namespace: webapp
+    namespace: ${kubernetes_namespace.application-namespace.metadata[0].name}
     creationPolicy: Owner
   dataFrom:
   - extract:
       key: application-secrets
   END
 
-  depends_on = [kubectl_manifest.application-secret-store, kubernetes_namespace.application-namespace]
+  depends_on = [kubectl_manifest.application-secret-store]
 }
