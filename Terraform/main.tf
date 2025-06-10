@@ -3,13 +3,12 @@ module "identity" {
 }
 
 module "security" {
-  source                 = "./Modules/Security"
-  backend-jwt-secret     = var.backend-jwt-secret
-  database-root-password = var.database-root-password
-  database-username      = var.database-username
-  database-password      = var.database-password
-  jenkins-username       = var.jenkins-username
-  jenkins-password       = var.jenkins-password
+  source             = "./Modules/Security"
+  backend-jwt-secret = var.backend-jwt-secret
+  database-username  = var.database-username
+  database-password  = var.database-password
+  jenkins-username   = var.jenkins-username
+  jenkins-password   = var.jenkins-password
 }
 
 module "network" {
