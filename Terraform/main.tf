@@ -44,7 +44,7 @@ module "cluster" {
   eks-worker-nodes-sg-id     = module.network.worker-nodes-sg-id
   worker-nodes-key-name      = module.security.bastion-server-key-name
 
-  depends_on = [module.identity]
+  depends_on = [module.identity, module.identity, module.security]
 }
 
 module "kubernetes" {
