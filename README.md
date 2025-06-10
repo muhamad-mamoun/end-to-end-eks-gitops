@@ -1,28 +1,124 @@
-# EKS Application Infrastructure with CI Pipeline
+# End-to-End EKS GitOps Platform for Full-Stack Todo List App
 
-A complete Infrastructure as Code (IaC) solution for deploying a 3-tier application on Amazon EKS with CI pipeline using Jenkins.
+A production-grade, fully automated infrastructure and CI/CD platform for deploying a 3-tier full-stack application on Amazon EKS using GitOps, ArgoCD, Jenkins, and Terraform.
 
-## Architecture Overview
+---
 
-- **Infrastructure**: AWS EKS cluster with managed node groups
-- **CI**: Jenkins on EKS for building container images
-- **Registry**: Amazon ECR for container images
-- **Networking**: VPC with public/private subnets and NAT Gateway
-- **Security**: Bastion host for secure cluster access
+## Table of Contents
+
+- [Project Overview](#project-overview)
+- [Architecture](#architecture)
+- [Tech Stack](#tech-stack)
+- [Features](#features)
+- [Repository Structure](#repository-structure)
+- [Prerequisites](#prerequisites)
+- [Setup & Deployment](#setup--deployment)
+- [CI/CD Pipeline](#cicd-pipeline)
+- [Application Details](#application-details)
+- [Security](#security)
+- [Cleanup](#cleanup)
+- [Contributing](#contributing)
+
+---
+
+## Project Overview
+
+This project provides a complete Infrastructure as Code (IaC) and GitOps solution for deploying and managing a production-ready 3-tier [Todo List App](https://github.com/muhamad-mamoun/full-stack-todo-list-app.git) on AWS EKS. It leverages Terraform for infrastructure provisioning, Helm for Kubernetes manifests, Jenkins for CI, ArgoCD for GitOps CD, and integrates AWS best practices for security, scalability, and automation.
+
+---
+
+## Architecture
+
+![Project Architecture](./Docs/architecture.png)
+
+- **VPC** with public/private subnets, NAT Gateway, and security groups
+- **EKS Cluster** with managed node groups, OIDC, and IAM roles for service accounts
+- **Jenkins** for CI pipeline, running on EKS with persistent storage
+- **ArgoCD** for GitOps-based continuous deployment
+- **Amazon ECR** for container image registry
+- **Helm** for templated Kubernetes manifests
+- **Kaniko** for secure container builds inside Kubernetes
+- **Ingress** with AWS Load Balancer Controller
+
+---
+
+## Tech Stack
+
+- **Cloud Provider:** AWS
+- **IaC:** Terraform
+- **Kubernetes:** Amazon EKS
+- **CI/CD:** Jenkins, ArgoCD
+- **Container Registry:** Amazon ECR
+- **GitOps:** ArgoCD, GitHub
+- **Helm:** Kubernetes package manager
+- **Kaniko:** Secure container image builds
+- **Languages:** YAML, HCL, Bash
+- **Security:** OIDC, IAM Roles for Service Accounts, Bastion Host, Private Networking
+
+---
+
+## Features
+
+- Automated provisioning of AWS infrastructure (VPC, EKS, ECR, IAM, etc.)
+- Secure, scalable, and highly available Kubernetes cluster
+- CI pipeline with Jenkins for building and pushing Docker images
+- GitOps deployment with ArgoCD and Helm
+- 3-tier application (frontend, backend, database) with persistent storage
+- Secure access via Bastion host and private subnets
+- OIDC integration for fine-grained IAM permissions
+- Ingress with AWS Load Balancer Controller
+- Parameterized and modular Terraform codebase
+
+---
+
+## Repository Structure
+
+```
+.
+├── Terraform/           # Infrastructure as Code (modular Terraform)
+│   ├── main.tf
+│   ├── Modules/
+│   └── ...
+├── Manifest/            # Helm chart for the 3-tier application
+│   ├── Chart.yaml
+│   ├── values.yaml
+│   └── templates/
+├── Jenkinsfile          # Jenkins CI pipeline definition
+├── Docs/
+│   └── architecture.png # Project architecture diagram
+└── README.md            # Project documentation
+```
+
+---
 
 ## Prerequisites
 
-1. AWS CLI configured with admin access
-2. Terraform installed
-3. kubectl installed
-4. helm installed
+- AWS CLI configured with admin access
+- Terraform >= 1.0
+- kubectl >= 1.22
+- helm >= 3.0
+- Docker
+- GitHub account and personal access token (for ArgoCD GitOps)
+- [Full-stack Todo List App](https://github.com/muhamad-mamoun/full-stack-todo-list-app.git) Docker images built or available
 
-## Quick Start
+---
 
-1. Clone this repository
-2. Create `secrets.tfvars` in the Terraform directory with required values:
+## Setup & Deployment
+
+### 1. Clone the Repository
+
+```bash
+git clone https://github.com/your-org/End-to-End-EKS-GitOps.git
+cd End-to-End-EKS-GitOps
+```
+
+### 2. Prepare Secrets
+
+Create a `secrets.tfvars` file in the `Terraform/` directory with the following content:
+
 ```hcl
 aws-profile            = "your-aws-profile"
+region                 = "your-aws-region"
 admin-public-ip        = "your-public-ip"
 backend-jwt-secret     = "your-jwt-secret"
 database-root-password = "db-root-pass"
@@ -30,81 +126,80 @@ database-password      = "db-pass"
 database-username      = "db-user"
 jenkins-username       = "jenkins-user"
 jenkins-password       = "jenkins-pass"
+argocd-hashed-password = "bcrypt-hash"
+github-username        = "your-github-username"
+github-password        = "your-github-token"
+gitops-repo-url        = "https://github.com/your-org/full-stack-todo-list-app.git"
+application-namespace  = "app"
+application-volume-id  = "your-ebs-volume-id"
+jenkins-volume-id      = "your-ebs-volume-id"
 ```
 
-3. Initialize and apply Terraform:
+### 3. Provision Infrastructure
+
 ```bash
 cd Terraform
 terraform init
 terraform apply -var-file="secrets.tfvars"
 ```
 
-## Infrastructure Components
+### 4. Configure kubectl
 
-### Network Layer
-- VPC with CIDR 10.0.0.0/16
-- 3 public and 3 private subnets across different AZs
-- NAT Gateway for private subnet internet access
-- Security groups for EKS and bastion host
-
-### EKS Cluster
-- EKS version 1.32
-- Managed node group with t3.medium instances
-- EBS CSI driver for persistent storage
-- AWS Load Balancer controller for ingress
-
-### CI Pipeline
-- Jenkins running on EKS with persistent storage
-- Kaniko for secure container image building
-- ECR repositories for frontend and backend images
-
-### Application
-- Pure Kubernetes manifests for the 3-tier application
-- Persistent volumes for database
-- Ingress configuration for external access
-
-## Folder Structure
-
-```
-.
-├── Terraform/           # Infrastructure as Code
-├── Manifest/            # Application Helm Chart
-└── Jenkinsfile          # Jenkins CI pipeline
-```
-
-## Security Features
-
-- Private EKS API endpoint
-- Bastion host for cluster access
-- OIDC integration for pod IAM roles
-- Network isolation with private subnets
-
-## Usage
-
-1. Access Jenkins UI:
 ```bash
-kubectl get svc -n jenkins
+aws eks update-kubeconfig --profile <aws-profile> --region <region> --name <cluster-name>
 ```
 
-2. Access the bastion host:
+### 5. Deploy the Application
+
 ```bash
-ssh -i ssh-key ubuntu@$(terraform output -raw bastion-server-public-ip)
+helm install todo-app ./Manifest -f Manifest/custom.yaml -n app --create-namespace
 ```
 
-## Application Deployment
+---
 
-Deploy the application using kubectl:
-```bash
-helm install ./Manifest -f Manifest/custom.yaml -n app --create-namespace
-```
+## CI/CD Pipeline
+
+- **Jenkins** builds Docker images for frontend and backend, pushes to ECR.
+- **ArgoCD** watches the GitOps repo and syncs Kubernetes manifests to EKS.
+- **Image Updater**: Automated image updates via ArgoCD Image Updater annotations.
+
+---
+
+## Application Details
+
+- **Frontend**: React app (see [full-stack-todo-list-app](https://github.com/muhamad-mamoun/full-stack-todo-list-app.git))
+- **Backend**: Node.js/Express API
+- **Database**: MySQL (StatefulSet with persistent EBS volume)
+- **Helm values**: All configuration is parameterized in `Manifest/values.yaml`
+- **Ingress**: Configurable via Helm, supports AWS Load Balancer
+
+---
+
+## Security
+
+- **Private EKS API endpoint**
+- **Bastion host** for secure cluster access
+- **OIDC** for IAM Roles for Service Accounts (least privilege)
+- **Secrets** managed via Kubernetes and AWS Secrets Manager
+- **Network isolation** with public/private subnets
+
+---
 
 ## Cleanup
 
 To destroy all resources:
+
 ```bash
+cd Terraform
 terraform destroy -var-file="secrets.tfvars"
 ```
 
+---
+
 ## Contributing
 
-Feel free to open issues and pull requests for improvements.
+Contributions are welcome! Please open issues or pull requests for improvements, bug fixes, or new features.
+
+---
+
+**Maintainer:** [Mamoun](https://github.com/muhamad-mamoun)
