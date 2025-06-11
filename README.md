@@ -1,4 +1,4 @@
-# End-to-End EKS GitOps Platform for Full-Stack To-Do List App
+# End-to-End EKS GitOps for Full-Stack To-Do List App
 
 A production-grade, fully automated infrastructure and CI/CD platform for deploying a 3-tier full-stack application on Amazon EKS using GitOps, ArgoCD, Jenkins, and Terraform.
 
