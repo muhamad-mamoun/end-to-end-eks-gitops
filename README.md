@@ -1,4 +1,4 @@
-# End-to-End EKS GitOps Platform for Full-Stack Todo List App
+# End-to-End EKS GitOps Platform for Full-Stack To-Do List App
 
 A production-grade, fully automated infrastructure and CI/CD platform for deploying a 3-tier full-stack application on Amazon EKS using GitOps, ArgoCD, Jenkins, and Terraform.
 
@@ -23,7 +23,7 @@ A production-grade, fully automated infrastructure and CI/CD platform for deploy
 
 ## Project Overview
 
-This project provides a complete Infrastructure as Code (IaC) and GitOps solution for deploying and managing a production-ready 3-tier [Todo List App](https://github.com/muhamad-mamoun/full-stack-todo-list-app.git) on AWS EKS. It leverages Terraform for infrastructure provisioning, Helm for Kubernetes manifests, Jenkins for CI, ArgoCD for GitOps CD, and integrates AWS best practices for security, scalability, and automation.
+This project provides a complete Infrastructure as Code (IaC) and GitOps solution for deploying and managing a production-ready 3-tier [To-Do List App](https://github.com/muhamad-mamoun/full-stack-todo-list-app.git) on AWS EKS. It leverages Terraform for infrastructure provisioning, Helm for Kubernetes manifests, Jenkins for CI, ArgoCD for GitOps CD, and integrates AWS best practices for security, scalability, and automation.
 
 ---
 
@@ -85,7 +85,6 @@ This project provides a complete Infrastructure as Code (IaC) and GitOps solutio
 │   └── templates/
 ├── Jenkinsfile          # Jenkins CI pipeline definition
 ├── Docs/
-│   └── architecture.png # Project architecture diagram
 └── README.md            # Project documentation
 ```
 
@@ -135,7 +134,9 @@ application-volume-id  = "your-ebs-volume-id"
 jenkins-volume-id      = "your-ebs-volume-id"
 ```
 
-### 3. Provision Infrastructure
+### 3. Deploy Everything with One Command
+
+A major strength of this project is its **single-command deployment**: by running the following, all infrastructure and workloads (including CI/CD and the application) are provisioned and deployed automatically—no manual Helm or kubectl steps required.
 
 ```bash
 cd Terraform
@@ -143,17 +144,7 @@ terraform init
 terraform apply -var-file="secrets.tfvars"
 ```
 
-### 4. Configure kubectl
-
-```bash
-aws eks update-kubeconfig --profile <aws-profile> --region <region> --name <cluster-name>
-```
-
-### 5. Deploy the Application
-
-```bash
-helm install todo-app ./Manifest -f Manifest/custom.yaml -n app --create-namespace
-```
+Terraform will orchestrate the full setup: VPC, EKS, Jenkins, ArgoCD, ECR, IAM, and the 3-tier application, all in a single workflow.
 
 ---
 
@@ -177,8 +168,6 @@ helm install todo-app ./Manifest -f Manifest/custom.yaml -n app --create-namespa
 
 ## Security
 
-- **Private EKS API endpoint**
-- **Bastion host** for secure cluster access
 - **OIDC** for IAM Roles for Service Accounts (least privilege)
 - **Secrets** managed via Kubernetes and AWS Secrets Manager
 - **Network isolation** with public/private subnets
@@ -196,10 +185,5 @@ terraform destroy -var-file="secrets.tfvars"
 
 ---
 
-## Contributing
-
-Contributions are welcome! Please open issues or pull requests for improvements, bug fixes, or new features.
-
----
-
-**Maintainer:** [Mamoun](https://github.com/muhamad-mamoun)
+**Author:** Mamoun  
+Email: muhamad.mamoun@gmail.com
