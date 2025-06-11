@@ -158,7 +158,7 @@ Terraform will orchestrate the full setup: VPC, EKS, Jenkins, ArgoCD, ECR, IAM, 
 
 ## Application Details
 
-- **Frontend**: React app (see [full-stack-todo-list-app](https://github.com/muhamad-mamoun/full-stack-todo-list-app.git))
+- **Frontend**: HTML, CSS, and JS (see [full-stack-todo-list-app](https://github.com/muhamad-mamoun/full-stack-todo-list-app.git))
 - **Backend**: Node.js/Express API
 - **Database**: MySQL (StatefulSet with persistent EBS volume)
 - **Helm values**: All configuration is parameterized in `Manifest/values.yaml`
