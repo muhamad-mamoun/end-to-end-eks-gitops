@@ -17,11 +17,11 @@ server:
       kubernetes.io/ingress.allow-http: "true"
 
     tls: []
-
+    hostname: argo.todo-app.com
     extraRules:
       - http:
           paths:
-            - path: /argocd
+            - path: /
               pathType: Prefix
               backend:
                 service:
