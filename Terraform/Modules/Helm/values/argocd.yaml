@@ -18,16 +18,6 @@ server:
 
     tls: []
     hostname: argo.todo-app.com
-    extraRules:
-      - http:
-          paths:
-            - path: /
-              pathType: Prefix
-              backend:
-                service:
-                  name: '{{ include "argo-cd.server.fullname" . }}'
-                  port:
-                    name: "{{ .Values.server.service.servicePortHttpsName }}"
     pathType: Prefix
     service:
       port:
