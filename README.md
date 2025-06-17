@@ -68,6 +68,8 @@ This project provides a complete Infrastructure as Code (IaC) and GitOps solutio
 - OIDC integration for fine-grained IAM permissions
 - Ingress with AWS Load Balancer Controller
 - Parameterized and modular Terraform codebase
+- Automated ECR repository creation and image scanning
+- ArgoCD Image Updater integration for automatic image updates
 
 ---
 
@@ -78,6 +80,15 @@ This project provides a complete Infrastructure as Code (IaC) and GitOps solutio
 ├── Terraform/           # Infrastructure as Code (modular Terraform)
 │   ├── main.tf
 │   ├── Modules/
+│   │   ├── Cluster/
+│   │   ├── Compute/
+│   │   ├── Helm/
+│   │   ├── Identity/
+│   │   ├── Kubernetes/
+│   │   ├── Network/
+│   │   ├── OIDC/
+│   │   ├── Registry/
+│   │   └── Security/
 │   └── ...
 ├── Manifest/            # Helm chart for the 3-tier application
 │   ├── Chart.yaml
@@ -85,6 +96,7 @@ This project provides a complete Infrastructure as Code (IaC) and GitOps solutio
 │   └── templates/
 ├── Jenkinsfile          # Jenkins CI pipeline definition
 ├── Docs/
+│   └── architecture.png
 └── README.md            # Project documentation
 ```
 
@@ -152,7 +164,8 @@ Terraform will orchestrate the full setup: VPC, EKS, Jenkins, ArgoCD, ECR, IAM, 
 
 - **Jenkins** builds Docker images for frontend and backend, pushes to ECR.
 - **ArgoCD** watches the GitOps repo and syncs Kubernetes manifests to EKS.
-- **Image Updater**: Automated image updates via ArgoCD Image Updater annotations.
+- **ArgoCD Image Updater**: Automatically updates images in the manifests based on new tags in ECR.
+- **Automated ECR login and image push**: Terraform provisions ECR repositories and pushes initial images.
 
 ---
 
