@@ -46,3 +46,6 @@ bastion-server-ami-id      = "ami-0a7d80731ae1b2435"
 
 jenkins-ebs-zone      = "us-east-1a"
 application-namespace = "webapp"
+
+prometheus-namespace = "monitoring"
+prometheus-ebs-zone  = "us-east-1c"

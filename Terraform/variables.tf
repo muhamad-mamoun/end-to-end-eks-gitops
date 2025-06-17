@@ -82,6 +82,10 @@ variable "application-namespace" {
   type = string
 }
 
+variable "prometheus-namespace" {
+  type = string
+}
+
 variable "application-volume-id" {
   type = string
 }
@@ -96,6 +100,23 @@ variable "github-username" {
 variable "github-password" {
   type = string
 }
+
 variable "gitops-repo-url" {
+  type = string
+}
+
+variable "prometheus-volume-id" {
+  type = string
+}
+
+variable "prometheus-username" {
+  type = string
+}
+
+variable "prometheus-password" {
+  type = string
+}
+
+variable "prometheus-ebs-zone" {
   type = string
 }

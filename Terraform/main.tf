@@ -58,6 +58,10 @@ module "helm" {
   ecr-registry-url       = module.registry.ecr-registry-url
   jenkins-namespace      = module.kubernetes.jenkins-namespace
   aws-sm-read-role-arn   = module.open-id-connect.aws-sm-read-role-arn
+  prometheus-namespace   = module.kubernetes.prometheus-namespace
+  prometheus-username    = var.prometheus-username
+  prometheus-password    = var.prometheus-password
+  prometheus-ebs-zone    = var.prometheus-ebs-zone
 }
 
 module "kubernetes" {
@@ -80,6 +84,8 @@ module "kubernetes" {
   ingress-namespace      = module.helm.ingress-namespace
   argocd-namespace       = module.helm.argocd-namespace
   eso-namespace          = module.helm.eso-namespace
+  prometheus-namespace   = var.prometheus-namespace
+  prometheus-volume-id   = var.prometheus-volume-id
 }
 
 module "open-id-connect" {

@@ -1,0 +1,16 @@
+grafana:
+  adminUser: ${GRAFANA_USERNAME}
+  adminPassword: ${GRAFANA_PASSWORD}
+  ingress:
+    enabled: true
+    path: /
+    hosts:
+      - grafana.todo-app.com
+    annotations:
+      kubernetes.io/ingress.class: nginx
+prometheus:
+  ingress:
+    enabled: true
+    ingressClassName: "nginx"
+    hosts:
+      - prometheus.todo-app.com

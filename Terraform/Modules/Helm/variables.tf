@@ -42,6 +42,22 @@ variable "jenkins-namespace" {
   type = string
 }
 
+variable "prometheus-namespace" {
+  type = string
+}
+
+variable "prometheus-username" {
+  type = string
+}
+
+variable "prometheus-password" {
+  type = string
+}
+
+variable "prometheus-ebs-zone" {
+  type = string
+}
+
 variable "aws-sm-read-role-arn" {
   type = string
 }

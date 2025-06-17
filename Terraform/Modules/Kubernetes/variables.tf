@@ -52,11 +52,19 @@ variable "application-namespace" {
   type = string
 }
 
+variable "prometheus-namespace" {
+  type = string
+}
+
 variable "eso-namespace" {
   type = string
 }
 
 variable "application-volume-id" {
+  type = string
+}
+
+variable "prometheus-volume-id" {
   type = string
 }
 
